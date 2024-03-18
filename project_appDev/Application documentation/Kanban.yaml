@@ -1,0 +1,970 @@
+openapi: 3.0.3
+info:
+  title: Kanban V2
+  description: >-
+    This is a Kanban application which allows users to manage tasks on a
+    dashboard using lists and cards.
+  version: 1.0.11
+servers:
+  - url: https://localhost:8080/api
+tags:
+  - name: User
+    description: All user methods
+  - name: List
+    description: Access all lists
+  - name: Card
+    description: Access all cards
+  - name: Export
+    description: Export csv reports
+  - name: Import
+    description: Import csv reports
+  - name: List summary
+    description: List summary chart
+  - name: Card summary
+    description: Cards summary chart
+  - name: Completion summary
+    description: Completed Cards summary chart
+  - name: Last updated summary
+    description: Last updated card details
+paths:
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get the current user
+      description: Get the current user
+      responses:
+        '200':
+          description: Successful user fetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Username:
+                    type: string
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  report_template:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+    post:
+      tags:
+        - User
+      summary: Change user credentials
+      description: Change username or password
+      requestBody:
+        description: Include parameters to change
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Username:
+                  type: string
+                password:
+                  type: string
+                cpassword:
+                  type: string
+                report_template:
+                  type: string
+      responses:
+        '200':
+          description: Successfully changed user details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  username:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+  /lists:
+    get:
+      tags:
+        - List
+      summary: Get all lists of the user
+      description: Get all lists of the user
+      responses:
+        '200':
+          description: Successful lists fetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                  list_name:
+                    type: string
+                  description:
+                    type: string
+                  id:
+                    type: integer
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+    post:
+      tags:
+        - List
+      summary: Add a list
+      description: Add a list
+      requestBody:
+        description: Include new list parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listname:
+                  type: string
+                listdesc:
+                  type: string
+      responses:
+        '200':
+          description: Successfully added list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  listname:
+                    type: string
+                  description:
+                    type: string
+                  listid:
+                    type: integer
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+  /lists/{listid}:
+    put:
+      tags:
+        - List
+      summary: Edit a list
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: Edit a list name and description
+      requestBody:
+        description: Include updated list parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listname:
+                  type: string
+                listdesc:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  listname:
+                    type: string
+                  description:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+    
+    delete:
+      tags:
+        - List
+      summary: Delete a list
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: Delete a list
+      responses:
+        '200':
+          description: Successfully deleted list
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+  /cards:
+    summary: CRUD operations for cards
+    description: CRUD operations for cards
+    get:
+      tags:
+          - Card
+      summary: Get all cards for a user
+      description: Get all cards for a user
+      responses:
+        '200':
+          description: Successful cards fetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                  card_title:
+                    type: string
+                  card_content:
+                    type: string
+                  created:
+                    type: string
+                  card_due_date:
+                    type: string
+                  status:
+                    type: string
+                  completed_date:
+                    type: string
+                  last_modified:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+  /cards/{listid}:
+    post:
+      tags:
+        - Card
+      summary: Add a card
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: Add a card to a list
+      requestBody:
+        description: Include new card details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardname:
+                  type: string
+                carddesc:
+                  type: string
+                carddue:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                  card_title:
+                    type: string
+                  card_content:
+                    type: string
+                  created:
+                    type: string
+                  card_due_date:
+                    type: string
+                  status:
+                    type: string
+                  completed_date:
+                    type: string
+                  last_modified:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found  
+  
+  /cards/{listid}/{cardtitle}:       
+    put:
+      tags:
+        - Card
+      summary: Edit a card
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: cardtitle
+          in: path
+          required: true
+          schema:
+            type: string
+      description: Edit card content and description
+      requestBody:
+        description: Include updated card details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardname:
+                  type: string
+                carddesc:
+                  type: string
+                carddue:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+          
+    patch:
+      tags:
+        - Card
+      summary: Edit a card
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: cardtitle
+          in: path
+          required: true
+          schema:
+            type: string
+      description: Edit card status, move card and due date
+      requestBody:
+        description: Include updated card details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newlistid:
+                  type: integer
+                carddue:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  card_due_date:
+                    type: string
+                  status:
+                    type: string
+                  completed_date:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+    delete:
+      tags:
+        - Card
+      summary: Delete a card
+      parameters:
+        - name: listid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: cardtitle
+          in: path
+          required: true
+          schema:
+            type: string
+      description: Delete a card
+      responses:
+        '200':
+          description: Successfully deleted card
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+          
+  /exportcsv:       
+    get:
+      tags:
+        - Export
+      summary: Export csv for dashboard
+      description: Export csv for dashboard
+      responses:
+        '200':
+          description: Successfully downloaded csv
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+    post:
+      tags:
+        - Export
+      summary: Export a csv 
+      description: Export a csv for a list
+      requestBody:
+        description: Include listid
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listid:
+                  type: integer
+      responses:
+        '200':
+          description: Successfully downloaded csv
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+          
+  /importcsv:       
+    get:
+      tags:
+        - Import
+      summary: Get sample csv for dashboard
+      description: Get sample csv for dashboard
+      responses:
+        '200':
+          description: Successfully downloaded sample report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+    post:
+      tags:
+        - Import
+      summary: Upload a csv 
+      description: Upload a csv for dashboard
+      requestBody:
+        description: Upload csv data file
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Successfully updated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+  /listsummary:       
+    get:
+      tags:
+        - List summary
+      summary: Get list chart
+      description: Get list summary chart
+      responses:
+        '200':
+          description: Chart updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+          
+  /cardsummary:       
+    get:
+      tags:
+        - Card summary
+      summary: Get cards chart
+      description: Get cards summary chart
+      responses:
+        '200':
+          description: Chart updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+          
+  /completionsummary:       
+    get:
+      tags:
+        - Completion summary
+      summary: Get completed graph
+      description: Get completed tasks graph
+      responses:
+        '200':
+          description: Chart updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found
+          
+  /lastupdatedsummary:       
+    get:
+      tags:
+        - Last updated summary
+      summary: Get completed cards data
+      description: Get completed cards data
+      responses:
+        '200':
+          description: Chart updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listname:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: You are not authenticated. Please supply the correct credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      - error
+        '404':
+          description: Page not found

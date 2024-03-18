@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h3>Good Evening {{user.Username}},</h3>
+        {% if listdata|length == 0 %}
+        <p>Congratulations, you have no pending tasks as of today!</p>
+        {% else %}
+        The following are your pending tasks due as of today:
+        <div>
+        <ul>
+            {% for list in listdata %}
+            <p><b><em>{{list.list_name}}</em></b></p>
+            {% for card in list.cards %}
+            <li>
+                {{card.card_title}} - Due on : {{card.card_due_date}}
+            </li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+
+        <p>Please update the status, if not done already.</p>
+        </div>
+        {% endif %}
+        <br>
+        <br>
+        
+        Team BoardIt
+
+    </body>
+</html>

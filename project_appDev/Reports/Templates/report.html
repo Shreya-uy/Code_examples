@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+	<style type="text/css">
+		@page{
+			background: #FEFCF3;
+			@top-left{
+					 background: #DBA39A;
+					 content:counter(page);
+					 height:1.5cm;
+					 text-align:center;
+					 width:1.5cm;
+				}
+			 @top-center{
+				 	 content: '';
+					 background: #DBA39A;
+					 display: block;
+					 height: 0.5cm;
+					 opacity: 0.5cm;
+					 width: 100%;
+			 }
+			 @top-right{
+					 content: string(heading);
+					 font-size: 9pt;
+					 height: 1.5cm;
+					 vertical-aligh: middle;
+					 width: 100%;
+			 }
+			 @bottom-center{
+			   	content: '';
+				background: #DBA39A;
+				display: block;
+				height: 0.5cm;
+				opacity: 0.5cm;
+				width: 100%;
+			 }
+			 @bottom-right{
+			 	content:"Page " counter(page) " of " counter(pages);
+				height:1.5cm;
+				width: 50%;
+			 }
+		}
+		@page :first{
+				background-size: cover;
+				margin: 1in;
+		}
+		h1{ 
+            		margin-left: 0px;
+            		overflow-wrap: break-word;
+            		color:#3C4048;
+       			font-size: 38pt;
+			margin: 50% 0 50% 0;
+			width: 100%;
+			page-break-after: always;
+        	}
+        	html{
+		       color: #393939;
+		       font-family: "Open Sans", "Noto sans",sans-serif;
+		       font-size: 11pt;
+		       font-weight: 300;
+		       line-height: 1.5;
+		}
+		table {
+		    border: 1px solid black;
+		    border-collapse:collapse;
+		    width: 100%;
+		    margin-top: 0.7cm;
+		    text-align: center;
+		    font-size: 12px;
+		}
+		
+		th, td{
+	  	    line-height: 1;
+		    border: 1px solid black;
+		    border-collapse:collapse;
+		    overflow-wrap: break-word;
+		    width: 16%;
+		    font-size: 12px;
+		}
+
+		#description{
+			width: 36%;
+		}
+		#content-list{
+	       		break-after: left;
+	   	}
+	   	h2{
+	   		string-set: heading content();
+	   		page-break-before: always;
+	   	}
+	   	img{
+	   		width: 10cm;
+	   	}
+	   	#content ul{
+		       list-style: none;
+		       padding-left: 0;
+		}
+		   
+		#content ul li{
+		       border: 5pt solid #F2DEBA;
+		       margin: .4cm 0;
+		       padding-top: .25cm;
+		       background: #f5e3c4;
+		}	
+	</style>
+	<title>Monthly Report</title>
+</head>
+<body>
+		<div id="cover">
+			<h1> {{ user.Username }}'s activity summary for the month of {{month}} </h1>
+		</div>
+		<div id="content">
+			<h2> Card details by category </h2>
+			{% for item in monthdata %}
+			{% if monthdata[item]|length >0 %}
+			{% set curlist=monthdata[item] %}
+			<br>
+			<table>
+				<thead>{{item}}</thead>
+				<tbody>
+					<tr>
+						<th> Card Title </th>
+						<th id="description"> Description </th>
+						<th> Due Date </th>
+						<th> Completion Date </th>
+						<th> Category </th>
+					</tr>
+					{% for card in curlist %}
+					<tr>
+						<td>{{card.card_title}}</td>
+						<td id="description">{{card.card_content}}</td>
+						<td>{{card.card_due_date}}</td>
+						<td>{{card.completed_date}}</td>
+						<td>{{listdict[card.list_id]}}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
+			{% endfor %}
+			<div id ="fig">
+				<h2>Summary Chart</h2>
+				<img class="chart" src = "static/{{user.id}}Monthly_cards_plot.png" name = "fig">
+			</div>
+			<div> 
+				<h2>Summary stats for the month of {{month}}</h2>
+				    <ul>
+				       <li> Cards completed within 7 days of creation : {{card_categories['weekly']}} </li>
+				       <li> Cards completed within 15 days of creation : {{card_categories['fortnightly']}} </li>
+				       <li> Cards completed more than 15 days later : {{card_categories ['others']}} </li>
+				       <li> Incomplete cards : {{card_categories ['incomplete']}} </li>
+				    </ul>
+			</div>
+		</div>
+</body>
+</html>

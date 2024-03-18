@@ -1,0 +1,185 @@
+/* Used for all divs & body without specifications*/
+div {
+text-indent: 60px;}
+
+body{
+text-align:center;
+white-space: nowrap;}
+
+/* Used in user_home.html for three's list*/
+.collist {
+overflow-x: auto;
+height:700px;
+width: 400px; 
+}
+
+/* Used in user_home.html for remainder list*/
+
+.left-margin{
+margin-left:180px;
+width:97%; 
+}
+
+/* Used in user_home.html for message when board is empty*/
+.nolist{
+    text-align: center;
+    font-size: 30px;
+    padding-top: 10px;
+}
+
+/* Used in user_home.html for 'add-list' icon*/
+
+#addlist{
+    text-align:center;
+    padding-top: 20px;
+    font-size: 30px;
+}
+
+/* Used in user_home.html loop for 'modify-list' icons for each list*/
+
+#modifylist{
+    text-align:center;
+    font-size: 15px;
+}
+
+/* Used in user_home.html loop for list name & description displayed in each column*/
+.list-name{
+    text-align:center;
+    font-size:25px;
+}
+
+.desc{
+    text-align:center;
+    font-size:18px;
+}
+
+/* Used in cards.html for title, content and all the remaining card contents*/
+.card-title{
+    text-indent:0px;
+    text-align:center;
+}
+.card-content{
+    text-indent:0px;
+    text-align:center;
+}
+
+.card-text{
+    text-indent:0px;
+}
+
+/* Used in cards.html for due date*/
+
+.footer-right{
+    text-align:right;
+}
+
+/* Used in cards.html for cards due today due message*/
+.text-yellow{
+    color:#ee960a;
+}
+
+/* Used in move_card.html for list dropdown*/
+.list-choice{
+    margin:8px 100px; 
+    background-color:rgb(32, 184, 171); 
+    color:white; 
+    width:30%; 
+    text-align:center;}
+
+/* Used in cards.html for cards due today due message*/
+.mark-complete{
+    text-align:center;
+    margin-bottom:0px;
+}
+
+/* Used in error.html for wrong link msg*/
+.error_text{
+    font-size:25px;
+    text-indent:10px !important; 
+}
+
+/* Used in trendline of Summary.html when no card has been completed yet*/
+.summary-chart{
+    text-indent:750px;
+}
+
+/*Used for changing color of the delete card icon*/
+.delcardicon{
+    color:rgba(18, 92, 251, 0.864);
+}
+
+
+/*Used for changing color of the mark incomplete icon*/
+.fa{
+  color:black
+}
+
+/* Styling the add list icon and text */
+
+.addlisticon{
+    text-align: center;
+    font-size: 28px;
+}
+
+.exportlisticon{
+    text-align: center;
+    font-size: 28px;
+}
+
+/* Rendering summary divs side by side */
+.element{
+    display:inline-block;
+}
+
+/* Summary table */
+#Summarytable{
+    border:1px solid black;
+    position:absolute;
+    top: 300px;
+}
+
+td{
+    border:1px solid black !important;
+    padding: 5px;
+}
+
+.tableheader{
+    position:absolute;
+    top: 250px;
+    font-size: 25px;
+    left: 1100px;
+    color: rgb(50, 129, 5);
+    font-weight: bold;
+}
+
+/* Profile page */
+
+.profile{
+    text-align: center;
+    line-height: 50px
+}
+
+.profheading{
+    font-size: 30px;
+    font-weight: 600;
+    font-style: italic
+}
+
+.proftext{
+    font-size: 20px;
+    font-family: "Lucida Handwriting", monospace;
+    font-weight: 120;
+}
+
+.email_block{
+    display: inline-block;
+}
+
+.selectreport{
+    font-family: "Helvetica Neue", monospace !important;
+    color:rgb(134, 134, 134) !important;
+}
+
+.uploadfile{
+    display: inline-block;
+}
